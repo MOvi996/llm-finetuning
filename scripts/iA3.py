@@ -14,6 +14,30 @@ from transformers import AutoTokenizer
 MODEL_NAME = "facebook/xglm-564M"
 CONFIG = XGLMConfig.from_pretrained(MODEL_NAME)
 
+class XGLMwithiA3(torch.nn.Module):
+    def __init__(self, model_name):
+        super().__init__()
+        self.model = AutoModelForCausalLM.from_pretrained(model_name)
+        self.modify_model_for_iA3()
+
+    def modify_model_for_iA3(self):
+        for param in self.model.parameters():
+            param.requires_grad = False
+
+        for layer in self.model.model.layers:
+            layer.self_attn = iA3Attention(layer.self_attn)
+            layer.fc1 = iA3Linear(layer.fc1)
+
+        for layer in self.model.model.layers:
+            layer.self_attn.l_k.requires_grad = True
+            layer.self_attn.l_v.requires_grad = True
+            layer.fc1.l_ff.requires_grad = True
+
+        return self.model
+
+    def forward(self, **kwargs):
+        return self.model(**kwargs)
+
 class iA3Attention(XGLMAttention):
     def __init__(self, layer_attn):
         super().__init__(layer_attn.embed_dim, layer_attn.num_heads, layer_attn.dropout, layer_attn.is_decoder)

@@ -13,7 +13,7 @@ from datasets import load_dataset, load_metric, load_dataset_builder, get_datase
 from transformers import Trainer, XGLMTokenizer, XGLMTokenizerFast, XGLMForCausalLM, AutoModelForCausalLM, AutoTokenizer, GenerationConfig, \
 AdamW, get_linear_schedule_with_warmup
 
-from lora import LoRALayer, LinearWithLoRA, modify_model_for_lora
+from lora import XGLMwithLoRA
 
 from tqdm import tqdm
 from datetime import datetime
@@ -22,17 +22,18 @@ from functools import partial
 from iA3 import modify_model_for_iA3
 
 
+
 # from sklearn.model_selection import train_test_split
 
 MODEL_NAME = "facebook/xglm-564M"
 BATCH_SIZE = 16
 EVAL_BATCH_SIZE = 16
 MAX_LENGTH = 32
-EPOCHS = 15
+EPOCHS = 2
 LR=5e-5
 WEIGHT_DECAY=0.01
-STRATEGY = "iA3" # full, bitfit, lora, iA3
-DATASET_SIZE="full" # full or a number
+STRATEGY = "lora" # full, bitfit, lora, iA3
+DATASET_SIZE="500" # full or a number
 save_dir = "trained_models"
 
 ########################################################
@@ -156,11 +157,14 @@ if __name__ == "__main__":
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # define the model
-    model = transformers.AutoModelForCausalLM.from_pretrained(MODEL_NAME)
-
     if STRATEGY == "lora":
-        model = modify_model_for_lora(model, rank=16, alpha=16)
-    elif STRATEGY == "iA3":
+        model = XGLMwithLoRA(MODEL_NAME, rank=16, alpha=16)
+    else:
+        model = transformers.AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+
+    # if STRATEGY == "lora":
+    #     model = modify_model_for_lora(model, rank=16, alpha=16)
+    if STRATEGY == "iA3":
         model = modify_model_for_iA3(model)
     
     optimizer = define_optimizer(model, learning_rate=LR, weight_decay=WEIGHT_DECAY, strategy=STRATEGY)

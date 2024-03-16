@@ -13,13 +13,13 @@ from datasets import load_dataset, load_metric, load_dataset_builder, get_datase
 from transformers import Trainer, XGLMTokenizer, XGLMTokenizerFast, XGLMForCausalLM, AutoModelForCausalLM, AutoTokenizer, GenerationConfig, \
 AdamW, get_linear_schedule_with_warmup
 
-from lora import LoRALayer, LinearWithLoRA, modify_model_for_lora
-
 from tqdm import tqdm
 from datetime import datetime
 from functools import partial
 
-from iA3 import modify_model_for_iA3
+from lora import AutoModelwithLoRA
+from dora import AutoModelwithDoRA
+from iA3 import AutoModelwithiA3
 
 
 # from sklearn.model_selection import train_test_split
@@ -27,22 +27,30 @@ from iA3 import modify_model_for_iA3
 MODEL_NAME = "facebook/xglm-564M"
 BATCH_SIZE = 16
 EVAL_BATCH_SIZE = 16
-MAX_LENGTH = 32
-EPOCHS = 15
+MAX_LENGTH = 64
+EPOCHS = 10
 LR=5e-5
-WEIGHT_DECAY=0.01
-STRATEGY = "iA3" # full, bitfit, lora, iA3
+WEIGHT_DECAY=0.0
+STRATEGY = "iA3" # full, bitfit, lora, dora, iA3
+RANK=16
+ALPHA=16
 DATASET_SIZE="full" # full or a number
-save_dir = "trained_models"
 
 ########################################################
 # Entry point
 ########################################################
 
+# initialize wandb
+wandb.init(project="nnti-project", name=STRATEGY+'-'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+wandb.config = {
+"learning_rate": LR,
+"epochs": EPOCHS,
+"batch_size": BATCH_SIZE,
+"strategy": STRATEGY,
+"dataset_size": DATASET_SIZE,
+"model_name": MODEL_NAME
+}
 
-# preprocess the logits for metrics
-def preprocess_logits_for_metrics(logits):
-    return torch.argmax(logits, dim=-1)
 
 # add labels to the dataset from input_ids
 def add_labels(example):
@@ -59,6 +67,78 @@ def tokenize_function(examples):
         return tokenizer(examples["sentence"], padding="max_length", truncation=True, max_length=MAX_LENGTH, return_tensors="pt")
 
 
+def train(model, dataloader, eval_dataloader, test_dataloaders, optimizer, epochs, scheduler, device='cuda'):
+
+    best_eval_loss = torch.inf
+    
+    for epoch in range(epochs):
+
+        model.train()
+        for iter, batch in tqdm(enumerate(dataloader)):
+            for key in batch:
+                batch[key] = batch[key].to(device)
+            outputs = model(**batch)
+            loss = outputs.loss
+            loss.backward()
+
+            optimizer.step()
+            scheduler.step()
+            optimizer.zero_grad()
+            
+            if iter % 50 == 0:
+                print(f"Iteration: {iter}, Training Loss: {loss.item()}")
+                wandb.log({"train_loss": loss.item(), "step":iter})
+        
+        
+        # evaluate the model
+        eval_losses = []
+        model.eval()
+        with torch.no_grad():
+            for batch in eval_dataloader:
+                for key in batch:
+                    batch[key] = batch[key].to(device)
+                outputs = model(**batch)
+                loss = outputs.loss
+                eval_losses.append(loss.item())
+        
+        mean_eval_loss = torch.mean(torch.tensor(eval_losses))
+        print(f"Epoch: {epoch}, Evaluation Loss: {mean_eval_loss}")
+        wandb.log({"eval_loss": mean_eval_loss, "epoch" : epoch})
+
+
+        # make a directory to save the model once the first epoch is finished
+        if epoch == 0:
+            if STRATEGY == "lora" or STRATEGY == "dora":
+                save_dir = f"trained_models/xglm_{STRATEGY}_{RANK}_{ALPHA}_{load_split_size}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}"
+            else:
+                save_dir = f"trained_models/xglm_{STRATEGY}_{load_split_size}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}"
+            os.makedirs(save_dir, exist_ok=True)
+            print(f"Model will be saved in {save_dir}")
+        
+        # save the model if the evaluation loss is the best with torch.save state_dict
+        if mean_eval_loss < best_eval_loss:
+            best_eval_loss = mean_eval_loss
+            torch.save(model.state_dict(), f"{save_dir}/best_model.pt")
+            print("best model saved")
+
+        
+        # test the model on flores (test) dataset after each epoch
+        test_losses = test(model, test_dataloaders, device)
+        mean_test_losses = {lang: torch.mean(torch.tensor(test_losses[lang])) for lang in LANGUAGES}
+
+        for lang in LANGUAGES:
+            print(f"Epoch: {epoch}, Language: {lang}, Test Loss: {mean_test_losses[lang]}")
+            wandb.log({f"test_loss_{lang}": mean_test_losses[lang], "epoch" : epoch})
+
+        test_loss = torch.mean(torch.tensor([mean_test_losses[lang] for lang in LANGUAGES]))
+
+        print(f"Epoch: {epoch}, Test Loss: {test_loss}")
+        wandb.log({"test_loss": test_loss, "epoch" : epoch})
+
+    return model
+
+
+
 def test(model, dataloaders, device='cuda'):
 
     losses = {lang: [] for lang in LANGUAGES}
@@ -73,6 +153,7 @@ def test(model, dataloaders, device='cuda'):
                 losses[lang].append(loss.item())
 
     return losses
+
 
 
 def define_optimizer(model, learning_rate=5e-5, weight_decay=0.01, strategy="full"):
@@ -93,12 +174,13 @@ def define_optimizer(model, learning_rate=5e-5, weight_decay=0.01, strategy="ful
     
 
 if __name__ == "__main__":
+
     # TODO: your code goes here
     
     if DATASET_SIZE == "full":
         load_split_size=""
     # elif DATASET_SIZE is a number:
-    elif DATASET_SIZE.isdigit():
+    elif isinstance(DATASET_SIZE, int) or DATASET_SIZE.isdigit():
         load_split_size = f"[:{DATASET_SIZE}]"
     else:
         raise ValueError("DATASET_SIZE should be either 'full' or a number")
@@ -137,7 +219,7 @@ if __name__ == "__main__":
     "tel_Telu",
     "tam_Taml",
     "quy_Latn",
-]
+    ]
 
     # load the evaluation dataset
     test_datasets = {}
@@ -156,12 +238,16 @@ if __name__ == "__main__":
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # define the model
-    model = transformers.AutoModelForCausalLM.from_pretrained(MODEL_NAME)
-
     if STRATEGY == "lora":
-        model = modify_model_for_lora(model, rank=16, alpha=16)
+        model = AutoModelwithLoRA(MODEL_NAME, rank=RANK, alpha=ALPHA)
+    elif STRATEGY == "dora":
+        model = AutoModelwithDoRA(MODEL_NAME, rank=RANK, alpha=ALPHA)
     elif STRATEGY == "iA3":
-        model = modify_model_for_iA3(model)
+        model = AutoModelwithiA3(MODEL_NAME)
+    else:
+        model = transformers.AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+
+
     
     optimizer = define_optimizer(model, learning_rate=LR, weight_decay=WEIGHT_DECAY, strategy=STRATEGY)
     num_training_steps = EPOCHS*len(train_dataloader)
@@ -169,81 +255,16 @@ if __name__ == "__main__":
 
     model.to(device)
     # log the results to wandb and set name of the run as current timestamp in UTC
-    wandb.init(project="nnti-project", name=STRATEGY+'-'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
-    wandb.config = {
-    "learning_rate": LR,
-    "epochs": EPOCHS,
-    "batch_size": BATCH_SIZE,
-    "strategy": STRATEGY,
-    }
-
-    # define the training loop
-    best_eval_loss = torch.inf
     
-    for epoch in range(EPOCHS):
-        model.train()
-        for iter, batch in tqdm(enumerate(train_dataloader)):
-            # labels = batch["input_ids"].to(device)
-            for key in batch:
-                batch[key] = batch[key].to(device)
-            outputs = model(**batch)
-            loss = outputs.loss
-            loss.backward()
 
-            optimizer.step()
-            scheduler.step()
-            optimizer.zero_grad()
-        
-            if iter % 50 == 0:
-                print(f"Epoch: {epoch}, Iteration: {iter}, Training Loss: {loss.item()}")
+    # train the model and note the time in seconds it took to train
+    start = datetime.now()
+    model = train(model, train_dataloader, eval_dataloader, test_dataloaders, optimizer, EPOCHS, scheduler, device)
+    end = datetime.now()
 
-                # log the results to wandb
-                wandb.log({"train_loss": loss.item(), "epoch" : epoch, "step":iter})
-                
+    print(f"Training time: {(end-start).seconds}")
+    wandb.log({"training_time": (end-start).seconds})
 
-        # evaluate the model
-        eval_losses = []
-        model.eval()
-        with torch.no_grad():
-            for batch in eval_dataloader:
-                for key in batch:
-                    batch[key] = batch[key].to(device)
-                outputs = model(**batch)
-                loss = outputs.loss
-                eval_losses.append(loss.item())
-        
-        mean_eval_loss = torch.mean(torch.tensor(eval_losses))
-        print(f"Epoch: {epoch}, Evaluation Loss: {mean_eval_loss}")
-        wandb.log({"eval_loss": mean_eval_loss, "epoch" : epoch})
-
-        
-        
-        # test the model on flores (test) dataset after each epoch
-        test_losses = test(model, test_dataloaders, device)
-        mean_test_losses = {lang: torch.mean(torch.tensor(test_losses[lang])) for lang in LANGUAGES}
-
-        for lang in LANGUAGES:
-            print(f"Epoch: {epoch}, Language: {lang}, Test Loss: {mean_test_losses[lang]}")
-            wandb.log({f"test_loss_{lang}": mean_test_losses[lang], "epoch" : epoch})
-
-        test_loss = torch.mean(torch.tensor([mean_test_losses[lang] for lang in LANGUAGES]))
-
-        print(f"Epoch: {epoch}, Test Loss: {test_loss}")
-        wandb.log({"eval_loss": test_loss, "epoch" : epoch})
-
-        # make a directory to save the model once the first epoch is finished
-        if epoch == 0:
-            save_dir = f"trained_models/xglm_{STRATEGY}_{load_split_size}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}"
-            os.makedirs(save_dir, exist_ok=True)
-    
-        model.save_pretrained(f"{save_dir}/epoch_{epoch}_model_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
-        
-        
-        # save the model if the evaluation loss is the best
-        if mean_eval_loss < best_eval_loss:
-            best_eval_loss = mean_eval_loss
-            model.save_pretrained(f"{save_dir}/best_model")
-            print("best model saved")
         
     wandb.finish()
     print("Training finished")

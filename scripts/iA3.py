@@ -11,8 +11,34 @@ from transformers import AutoTokenizer
 
 
 
-MODEL_NAME = "facebook/xglm-564M"
-CONFIG = XGLMConfig.from_pretrained(MODEL_NAME)
+# define the model
+class AutoModelwithiA3(torch.nn.Module):
+    def __init__(self, model_name):
+        super().__init__()
+        self.model = AutoModelForCausalLM.from_pretrained(model_name)
+        self.modify_model_for_iA3()
+
+    def modify_model_for_iA3(self):
+
+        for layer in self.model.model.layers:
+            layer.self_attn = iA3Attention(layer.self_attn)
+            layer.fc1 = iA3Linear(layer.fc1)
+
+        # freeze all params
+
+        for param in self.model.parameters():
+            param.requires_grad = False
+        
+        # unfreeze iA3 params
+        for layer in self.model.model.layers:
+            layer.self_attn.l_k.requires_grad = True
+            layer.self_attn.l_v.requires_grad = True
+            layer.fc1.l_ff.requires_grad = True
+
+        return self.model
+
+    def forward(self, **kwargs):
+        return self.model(**kwargs)
 
 class iA3Attention(XGLMAttention):
     def __init__(self, layer_attn):
@@ -43,8 +69,8 @@ class iA3Attention(XGLMAttention):
         # get key, value proj
         if is_cross_attention and past_key_value is not None:
             # reuse k,v, cross_attentions
-            key_states = past_key_value[0] * self.l_k
-            value_states = past_key_value[1] * self.l_v
+            key_states = past_key_value[0]
+            value_states = past_key_value[1]
         elif is_cross_attention:
             # cross_attentions
             key_states = self._shape(self.k_proj(key_value_states) * self.l_k, -1, bsz)
@@ -151,60 +177,3 @@ class iA3Linear(nn.Module):
     def forward(self, x):
         return self.linear(x) * self.l_ff
     
-
-# Modify the model to include iA3 attention and feedforward layers    
-def modify_model_for_iA3(model):
-
-    for layer in model.model.layers:
-        layer.self_attn = iA3Attention(layer.self_attn)
-        layer.fc1 = iA3Linear(layer.fc1)
-
-    # freeze all params except the iA3 attention and feedforward layers
-    for param in model.parameters():
-        param.requires_grad = False
-
-    for layer in model.model.layers:
-        layer.self_attn.l_k.requires_grad = True
-        layer.self_attn.l_v.requires_grad = True
-        layer.fc1.l_ff.requires_grad = True
-    
-    return model
-
-
-if __name__ == "__main__":
-    print("Loading iA3")
-    #     model = AutoModelForC ausalLM.from_pretrained(MODEL_NAME)
-    #     model = modify_model_for_iA3(model)
-
-    #     # load flores dataset
-    #     dataset = load_dataset("facebook/flores", "eng_Latn")
-
-    # # Tokenize the dataset
-
-    # tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-
-    # def tokenize_function(examples):
-    #     return tokenizer(examples["sentence"], padding="max_length", truncation=True, max_length=64, return_tensors="pt")
-
-    # tokenized_dataset = dataset.map(tokenize_function, batched=True, remove_columns=list(dataset["devtest"].features.keys()))
-    # tokenized_dataset.set_format(type='torch', columns=['input_ids', 'attention_mask'], format_kwargs={'dtype': torch.long})
-    # def add_labels(example):
-    #     return {**example, "labels": example["input_ids"]}
-
-    # tokenized_dataset = tokenized_dataset.map(add_labels)
-
-
-    # # Prepare the data for training
-
-
-
-    # train_dataset = tokenized_dataset["devtest"]
-    # train_dataloader = DataLoader(train_dataset, batch_size=8, shuffle=True)
-
-
-    # # Evaluate the model
-    # model.()
-    # model.to('cuda')
-    # eval_data = next(iter(train_dataloader))
-    # eval_data = {k: v.to('cuda') for k, v in eval_data.items()}
-    # output = model(**eval_data)

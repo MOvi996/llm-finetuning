@@ -2,7 +2,7 @@ import torch
 from functools import partial
 from transformers import AutoModelForCausalLM
 
-MODEL_NAME = "facebook/xglm-564M"
+# code inspired from https://lightning.ai/lightning-ai/studios/code-lora-from-scratch?tab=files&layout=column&path=cloudspaces%2F01hm9hypqc6y1hrapb5prmtz0h&y=5&x=0
 
 class LoRALayer(torch.nn.Module):
     def __init__(self, in_dim, out_dim, rank, alpha):
@@ -27,46 +27,27 @@ class LinearWithLoRA(torch.nn.Module):
     def forward(self, x):
         return self.linear(x) + self.lora(x)
     
+class AutoModelwithLoRA(torch.nn.Module):
+    def __init__(self, model_name, rank, alpha):
+        super().__init__()
+        self.model = AutoModelForCausalLM.from_pretrained(model_name)
+        self.rank = rank
+        self.alpha = alpha
+        self.modify_model_for_lora()
 
+    def modify_model_for_lora(self):
+        for param in self.model.parameters():
+            param.requires_grad = False
 
-def modify_model_for_lora(model, rank=8, alpha=16):
+        assign_lora = partial(LinearWithLoRA, rank=self.rank, alpha=self.alpha)
 
-    # default hyperparameter choices
-    lora_query = True
-    lora_key = False
-    lora_value = True
-    lora_out = False
-    lora_mlp = False
-    lora_head = False
-    
-    for param in model.parameters():
-        param.requires_grad = False
-    
-    assign_lora = partial(LinearWithLoRA, rank=rank, alpha=alpha)
-
-    for layer in model.model.layers:
-        if lora_query:
+        for layer in self.model.model.layers:
             layer.self_attn.q_proj = assign_lora(layer.self_attn.q_proj)
-        if lora_key:
-            model.layers.self_attn.k_proj = assign_lora(layer.self_attn.k_proj)
-        if lora_value:
             layer.self_attn.v_proj = assign_lora(layer.self_attn.v_proj)
-        if lora_out:
-            layer.self_attn.out_proj = assign_lora(layer.self_attn.out_proj)
-        if lora_mlp:
-            layer.fc1 = assign_lora(layer.fc1)
-            layer.fc2 = assign_lora(layer.fc2)
-    if lora_head:
-        model.lm_head = assign_lora(model.lm_head)
-
-    return model
-
-
-if __name__ == '__main__':
-    model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
-    print(model)
-    model = modify_model_for_lora(model)
-    print(model)
+            
+        return self.model
+    
+    def forward(self, **kwargs):
+        return self.model(**kwargs)
     
 
-    

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.16.3"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-b92106ff1dc15a2ff54ccd0ca245e124"}, "mark": {"type": "circle", "size": 60}, "encoding": {"color": {"field": "label", "type": "nominal"}, "tooltip": [{"field": "PC 1", "type": "quantitative"}, {"field": "PC 2", "type": "quantitative"}, {"field": "label", "type": "nominal"}, {"field": "description", "type": "nominal"}], "x": {"field": "PC 1", "type": "quantitative"}, "y": {"field": "PC 2", "type": "quantitative"}}, "height": 500, "params": [{"name": "param_17", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json", "datasets": {"data-b92106ff1dc15a2ff54ccd0ca245e124": [{"PC 1": 15.55774211883545, "PC 2": 46.32798385620117, "label": "Mean Pooled Sentence", "description": "V\u00e1lvulakunapa kichakuyninsi yanapasqa presi\u00f3n kachariyta sistemapaq, aceite\u00f1ataq kuyusqa huk plataformapi tanque yaqa 55.000 barrriles kaqniyuqman (2, 3 waranqa puy\u00f1ukuna)."}, {"PC 1": 104.20601654052734, "PC 2": 323.001708984375, "label": "Other Tokens", "description": "V\u00e1l"}, {"PC 1": -224.82107543945312, "PC 2": 84.3313980102539, "label": "Other Tokens", "description": "vula"}, {"PC 1": 81.65907287597656, "PC 2": 226.37918090820312, "label": "Other Tokens", "description": "kunapa"}, {"PC 1": -35.91860580444336, "PC 2": -101.08605194091797, "label": "Other Tokens", "description": "ki"}, {"PC 1": -29.082881927490234, "PC 2": -65.6330795288086, "label": "Other Tokens", "description": "ch"}, {"PC 1": -234.53724670410156, "PC 2": 10.139266014099121, "label": "Other Tokens", "description": "akuy"}, {"PC 1": 37.567466735839844, "PC 2": 147.3358154296875, "label": "Other Tokens", "description": "nin"}, {"PC 1": -171.0909881591797, "PC 2": 14.480108261108398, "label": "Other Tokens", "description": "si"}, {"PC 1": -20.611530303955078, "PC 2": 19.915008544921875, "label": "Other Tokens", "description": "yanapa"}, {"PC 1": 101.12055969238281, "PC 2": 216.63323974609375, "label": "Other Tokens", "description": "sqa"}, {"PC 1": -42.181541442871094, "PC 2": 29.352394104003906, "label": "Other Tokens", "description": "presi\u00f3n"}, {"PC 1": 62.84638977050781, "PC 2": 266.8053894042969, "label": "Other Tokens", "description": "ka"}, {"PC 1": -112.92901611328125, "PC 2": 36.753746032714844, "label": "Other Tokens", "description": "chari"}, {"PC 1": 35.248844146728516, "PC 2": -132.6870880126953, "label": "Other Tokens", "description": "yta"}, {"PC 1": 60.935611724853516, "PC 2": -112.42694854736328, "label": "Other Tokens", "description": "sistema"}, {"PC 1": -121.91677856445312, "PC 2": -18.865591049194336, "label": "Other Tokens", "description": "paq"}, {"PC 1": -33.61712646484375, "PC 2": -39.059173583984375, "label": "Other Tokens", "description": ","}, {"PC 1": -7.958154201507568, "PC 2": 66.15213775634766, "label": "Other Tokens", "description": "aceite"}, {"PC 1": -146.28936767578125, "PC 2": -16.92268180847168, "label": "Other Tokens", "description": "\u00f1a"}, {"PC 1": -35.053077697753906, "PC 2": -149.25070190429688, "label": "Other Tokens", "description": "taq"}, {"PC 1": 53.666786193847656, "PC 2": 6.87460470199585, "label": "Other Tokens", "description": "ku"}, {"PC 1": 60.4427604675293, "PC 2": -172.31642150878906, "label": "Other Tokens", "description": "y"}, {"PC 1": -149.0113067626953, "PC 2": 96.69144439697266, "label": "Other Tokens", "description": "usqa"}, {"PC 1": -23.075166702270508, "PC 2": -119.30430603027344, "label": "Other Tokens", "description": "huk"}, {"PC 1": 200.79049682617188, "PC 2": -54.595890045166016, "label": "Other Tokens", "description": "plataforma"}, {"PC 1": 234.07778930664062, "PC 2": -68.01731872558594, "label": "Other Tokens", "description": "pi"}, {"PC 1": 270.310791015625, "PC 2": 6.510009765625, "label": "Other Tokens", "description": ""}, {"PC 1": 158.2845001220703, "PC 2": -36.11577224731445, "label": "Other Tokens", "description": "tanque"}, {"PC 1": 93.27982330322266, "PC 2": -29.500377655029297, "label": "Other Tokens", "description": "ya"}, {"PC 1": -34.26615524291992, "PC 2": -79.10076904296875, "label": "Other Tokens", "description": "qa"}, {"PC 1": -32.47874069213867, "PC 2": -185.6932373046875, "label": "Other Tokens", "description": "5"}, {"PC 1": -93.80748748779297, "PC 2": -115.63448333740234, "label": "Other Tokens", "description": "5.000"}, {"PC 1": -141.07481384277344, "PC 2": -96.10552215576172, "label": "Other Tokens", "description": "barr"}, {"PC 1": -7.173479080200195, "PC 2": -65.43273162841797, "label": "Other Tokens", "description": "rile"}, {"PC 1": 222.49771118164062, "PC 2": -40.50472640991211, "label": "Other Tokens", "description": "s"}, {"PC 1": 261.567138671875, "PC 2": -64.40764617919922, "label": "Other Tokens", "description": "kaq"}, {"PC 1": 79.50588989257812, "PC 2": -31.616308212280273, "label": "Other Tokens", "description": "ni"}, {"PC 1": -131.25445556640625, "PC 2": 108.73761749267578, "label": "Other Tokens", "description": "yuq"}, {"PC 1": -102.8470230102539, "PC 2": 69.05435180664062, "label": "Other Tokens", "description": "man"}, {"PC 1": -116.83798217773438, "PC 2": -24.765695571899414, "label": "Other Tokens", "description": "(2"}, {"PC 1": -85.73092651367188, "PC 2": 43.565799713134766, "label": "Other Tokens", "description": ","}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>

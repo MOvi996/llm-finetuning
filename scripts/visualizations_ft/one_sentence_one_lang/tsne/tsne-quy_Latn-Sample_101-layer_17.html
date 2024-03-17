@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.16.3"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-916c28dc71a4c147267bc81ceb181e18"}, "mark": {"type": "circle", "size": 60}, "encoding": {"color": {"field": "label", "type": "nominal"}, "tooltip": [{"field": "tSNE Component 1", "type": "quantitative"}, {"field": "tSNE Component 2", "type": "quantitative"}, {"field": "label", "type": "nominal"}, {"field": "description", "type": "nominal"}], "x": {"field": "tSNE Component 1", "type": "quantitative"}, "y": {"field": "tSNE Component 2", "type": "quantitative"}}, "height": 500, "params": [{"name": "param_20", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json", "datasets": {"data-916c28dc71a4c147267bc81ceb181e18": [{"tSNE Component 1": -7.713824272155762, "tSNE Component 2": -0.9663828611373901, "label": "Mean Pooled Sentence", "description": "V\u00e1lvulakunapa kichakuyninsi yanapasqa presi\u00f3n kachariyta sistemapaq, aceite\u00f1ataq kuyusqa huk plataformapi tanque yaqa 55.000 barrriles kaqniyuqman (2, 3 waranqa puy\u00f1ukuna)."}, {"tSNE Component 1": -6.049604415893555, "tSNE Component 2": -1.6021381616592407, "label": "Other Tokens", "description": "V\u00e1l"}, {"tSNE Component 1": -8.432365417480469, "tSNE Component 2": -1.7804034948349, "label": "Other Tokens", "description": "vula"}, {"tSNE Component 1": -6.599093914031982, "tSNE Component 2": -1.2964109182357788, "label": "Other Tokens", "description": "kunapa"}, {"tSNE Component 1": -9.570273399353027, "tSNE Component 2": -0.6721148490905762, "label": "Other Tokens", "description": "ki"}, {"tSNE Component 1": -8.960833549499512, "tSNE Component 2": -1.1198135614395142, "label": "Other Tokens", "description": "ch"}, {"tSNE Component 1": -8.080442428588867, "tSNE Component 2": -2.133516311645508, "label": "Other Tokens", "description": "akuy"}, {"tSNE Component 1": -6.971691608428955, "tSNE Component 2": -1.2554545402526855, "label": "Other Tokens", "description": "nin"}, {"tSNE Component 1": -7.937906742095947, "tSNE Component 2": -1.7485342025756836, "label": "Other Tokens", "description": "si"}, {"tSNE Component 1": -7.634856700897217, "tSNE Component 2": -1.339526891708374, "label": "Other Tokens", "description": "yanapa"}, {"tSNE Component 1": -6.600176811218262, "tSNE Component 2": -1.161337971687317, "label": "Other Tokens", "description": "sqa"}, {"tSNE Component 1": -7.779966831207275, "tSNE Component 2": -1.005672812461853, "label": "Other Tokens", "description": "presi\u00f3n"}, {"tSNE Component 1": -6.529965400695801, "tSNE Component 2": -1.4183048009872437, "label": "Other Tokens", "description": "ka"}, {"tSNE Component 1": -7.6161723136901855, "tSNE Component 2": -1.5894153118133545, "label": "Other Tokens", "description": "chari"}, {"tSNE Component 1": -9.334369659423828, "tSNE Component 2": -0.14837771654129028, "label": "Other Tokens", "description": "yta"}, {"tSNE Component 1": -8.734552383422852, "tSNE Component 2": 0.07347788661718369, "label": "Other Tokens", "description": "sistema"}, {"tSNE Component 1": -8.145873069763184, "tSNE Component 2": -1.0834097862243652, "label": "Other Tokens", "description": "paq"}, {"tSNE Component 1": -8.14537239074707, "tSNE Component 2": -0.7511889934539795, "label": "Other Tokens", "description": ","}, {"tSNE Component 1": -7.393761157989502, "tSNE Component 2": -1.006293773651123, "label": "Other Tokens", "description": "aceite"}, {"tSNE Component 1": -7.76292610168457, "tSNE Component 2": -1.8215848207473755, "label": "Other Tokens", "description": "\u00f1a"}, {"tSNE Component 1": -7.650911331176758, "tSNE Component 2": -2.807513952255249, "label": "Other Tokens", "description": "taq"}, {"tSNE Component 1": -7.509587287902832, "tSNE Component 2": -0.7012993693351746, "label": "Other Tokens", "description": "ku"}, {"tSNE Component 1": -8.38191032409668, "tSNE Component 2": 0.3216758668422699, "label": "Other Tokens", "description": "y"}, {"tSNE Component 1": -8.654939651489258, "tSNE Component 2": -2.070436954498291, "label": "Other Tokens", "description": "usqa"}, {"tSNE Component 1": -8.31231689453125, "tSNE Component 2": -0.28842517733573914, "label": "Other Tokens", "description": "huk"}, {"tSNE Component 1": -7.117324352264404, "tSNE Component 2": 0.2846783399581909, "label": "Other Tokens", "description": "plataforma"}, {"tSNE Component 1": -7.030789852142334, "tSNE Component 2": 0.29868173599243164, "label": "Other Tokens", "description": "pi"}, {"tSNE Component 1": -6.580531597137451, "tSNE Component 2": -0.1064312756061554, "label": "Other Tokens", "description": ""}, {"tSNE Component 1": -7.018339157104492, "tSNE Component 2": -0.22846701741218567, "label": "Other Tokens", "description": "tanque"}, {"tSNE Component 1": -7.404219627380371, "tSNE Component 2": -0.5407730937004089, "label": "Other Tokens", "description": "ya"}, {"tSNE Component 1": -7.887979507446289, "tSNE Component 2": -0.6493082642555237, "label": "Other Tokens", "description": "qa"}, {"tSNE Component 1": -8.87138557434082, "tSNE Component 2": -0.8347748517990112, "label": "Other Tokens", "description": "5"}, {"tSNE Component 1": -8.04675006866455, "tSNE Component 2": -0.9264383316040039, "label": "Other Tokens", "description": "5.000"}, {"tSNE Component 1": -7.844912052154541, "tSNE Component 2": -1.8851946592330933, "label": "Other Tokens", "description": "barr"}, {"tSNE Component 1": -9.593664169311523, "tSNE Component 2": -0.7472551465034485, "label": "Other Tokens", "description": "rile"}, {"tSNE Component 1": -7.004080772399902, "tSNE Component 2": 0.4180489182472229, "label": "Other Tokens", "description": "s"}, {"tSNE Component 1": -6.9171462059021, "tSNE Component 2": 0.7344879508018494, "label": "Other Tokens", "description": "kaq"}, {"tSNE Component 1": -8.99864673614502, "tSNE Component 2": 0.1915695071220398, "label": "Other Tokens", "description": "ni"}, {"tSNE Component 1": -8.6316556930542, "tSNE Component 2": -1.7037451267242432, "label": "Other Tokens", "description": "yuq"}, {"tSNE Component 1": -8.535283088684082, "tSNE Component 2": -1.5455677509307861, "label": "Other Tokens", "description": "man"}, {"tSNE Component 1": -8.653905868530273, "tSNE Component 2": -1.3450018167495728, "label": "Other Tokens", "description": "(2"}, {"tSNE Component 1": -8.915731430053711, "tSNE Component 2": -1.4966164827346802, "label": "Other Tokens", "description": ","}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>

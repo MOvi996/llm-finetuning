@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .error {
+        color: red;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.17.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}}, "data": {"name": "data-87a5d526eeafeffd1962b61adfe2f9ac"}, "mark": {"type": "circle", "size": 60}, "encoding": {"color": {"field": "label", "type": "nominal"}, "tooltip": [{"field": "tSNE Component 1", "type": "quantitative"}, {"field": "tSNE Component 2", "type": "quantitative"}, {"field": "label", "type": "nominal"}, {"field": "description", "type": "nominal"}], "x": {"field": "tSNE Component 1", "type": "quantitative"}, "y": {"field": "tSNE Component 2", "type": "quantitative"}}, "height": 500, "selection": {"selector050": {"type": "interval", "bind": "scales", "encodings": ["x", "y"]}}, "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json", "datasets": {"data-87a5d526eeafeffd1962b61adfe2f9ac": [{"tSNE Component 1": 0.5550596117973328, "tSNE Component 2": 0.8654620051383972, "label": "Mean Pooled Sentence", "description": "The valves opening allowed a pressure release for the system and oil flowed on a pad to a tank that can hold 55,000 barrels (2.3 million gallons)."}, {"tSNE Component 1": 1.318082332611084, "tSNE Component 2": 1.142665147781372, "label": "Other Tokens", "description": "The"}, {"tSNE Component 1": 0.8112970590591431, "tSNE Component 2": 1.498473882675171, "label": "Other Tokens", "description": "va"}, {"tSNE Component 1": 0.8816470503807068, "tSNE Component 2": 0.7254044413566589, "label": "Other Tokens", "description": "lves"}, {"tSNE Component 1": 0.7220357656478882, "tSNE Component 2": 1.2535247802734375, "label": "Other Tokens", "description": "opening"}, {"tSNE Component 1": 0.7919751405715942, "tSNE Component 2": 0.22529126703739166, "label": "Other Tokens", "description": "allowed"}, {"tSNE Component 1": 0.823612630367279, "tSNE Component 2": 0.24257522821426392, "label": "Other Tokens", "description": "a"}, {"tSNE Component 1": 0.6946796178817749, "tSNE Component 2": 0.8515247702598572, "label": "Other Tokens", "description": "pressure"}, {"tSNE Component 1": 0.6704026460647583, "tSNE Component 2": 1.4922879934310913, "label": "Other Tokens", "description": "release"}, {"tSNE Component 1": 0.6718556880950928, "tSNE Component 2": 1.5535153150558472, "label": "Other Tokens", "description": "for"}, {"tSNE Component 1": 0.5810325145721436, "tSNE Component 2": 0.1440030336380005, "label": "Other Tokens", "description": "the"}, {"tSNE Component 1": 0.5335025191307068, "tSNE Component 2": 1.5154368877410889, "label": "Other Tokens", "description": "system"}, {"tSNE Component 1": 1.6685826778411865, "tSNE Component 2": 0.5945885181427002, "label": "Other Tokens", "description": "and"}, {"tSNE Component 1": 0.6018224358558655, "tSNE Component 2": 1.6330673694610596, "label": "Other Tokens", "description": "oil"}, {"tSNE Component 1": 0.46946290135383606, "tSNE Component 2": 0.25160306692123413, "label": "Other Tokens", "description": "flow"}, {"tSNE Component 1": 0.48086607456207275, "tSNE Component 2": 1.252559781074524, "label": "Other Tokens", "description": "ed"}, {"tSNE Component 1": 0.3764396011829376, "tSNE Component 2": 1.4458339214324951, "label": "Other Tokens", "description": "on"}, {"tSNE Component 1": 0.24639303982257843, "tSNE Component 2": 0.9552467465400696, "label": "Other Tokens", "description": "a"}, {"tSNE Component 1": 0.18205244839191437, "tSNE Component 2": 1.0097999572753906, "label": "Other Tokens", "description": "pad"}, {"tSNE Component 1": -0.27489760518074036, "tSNE Component 2": 0.8921694755554199, "label": "Other Tokens", "description": "to"}, {"tSNE Component 1": -0.2935781180858612, "tSNE Component 2": 0.11957316100597382, "label": "Other Tokens", "description": "a"}, {"tSNE Component 1": -0.12585335969924927, "tSNE Component 2": 0.5543107986450195, "label": "Other Tokens", "description": "tank"}, {"tSNE Component 1": 0.0647716224193573, "tSNE Component 2": 1.4308127164840698, "label": "Other Tokens", "description": "that"}, {"tSNE Component 1": 1.3132989406585693, "tSNE Component 2": 0.6369249224662781, "label": "Other Tokens", "description": "can"}, {"tSNE Component 1": -0.3981175422668457, "tSNE Component 2": 1.2033854722976685, "label": "Other Tokens", "description": "hold"}, {"tSNE Component 1": -0.3254203200340271, "tSNE Component 2": 0.9399030804634094, "label": "Other Tokens", "description": "5"}, {"tSNE Component 1": -0.4329054653644562, "tSNE Component 2": 0.13503378629684448, "label": "Other Tokens", "description": "5,000"}, {"tSNE Component 1": -0.08296886831521988, "tSNE Component 2": 0.7785845398902893, "label": "Other Tokens", "description": "ba"}, {"tSNE Component 1": 0.30973494052886963, "tSNE Component 2": 1.5331755876541138, "label": "Other Tokens", "description": "rrels"}, {"tSNE Component 1": 1.3559703826904297, "tSNE Component 2": 0.9371909499168396, "label": "Other Tokens", "description": "("}, {"tSNE Component 1": 1.201863408088684, "tSNE Component 2": 1.0766661167144775, "label": "Other Tokens", "description": "2.3"}, {"tSNE Component 1": 0.9084644913673401, "tSNE Component 2": 1.4367502927780151, "label": "Other Tokens", "description": "million"}, {"tSNE Component 1": 1.0555670261383057, "tSNE Component 2": 0.3973988890647888, "label": "Other Tokens", "description": "gall"}, {"tSNE Component 1": 0.9209800362586975, "tSNE Component 2": 0.7391482591629028, "label": "Other Tokens", "description": "ons"}, {"tSNE Component 1": 0.7682180404663086, "tSNE Component 2": 1.4648479223251343, "label": "Other Tokens", "description": ")."}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>

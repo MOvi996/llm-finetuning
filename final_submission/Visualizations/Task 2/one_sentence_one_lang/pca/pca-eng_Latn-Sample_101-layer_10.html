@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .error {
+        color: red;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.17.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}}, "data": {"name": "data-0a88d53389b48dd69a421df9d4e59a6d"}, "mark": {"type": "circle", "size": 60}, "encoding": {"color": {"field": "label", "type": "nominal"}, "tooltip": [{"field": "PC 1", "type": "quantitative"}, {"field": "PC 2", "type": "quantitative"}, {"field": "label", "type": "nominal"}, {"field": "description", "type": "nominal"}], "x": {"field": "PC 1", "type": "quantitative"}, "y": {"field": "PC 2", "type": "quantitative"}}, "height": 500, "selection": {"selector005": {"type": "interval", "bind": "scales", "encodings": ["x", "y"]}}, "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json", "datasets": {"data-0a88d53389b48dd69a421df9d4e59a6d": [{"PC 1": 14.80109691619873, "PC 2": 6.396641731262207, "label": "Mean Pooled Sentence", "description": "The valves opening allowed a pressure release for the system and oil flowed on a pad to a tank that can hold 55,000 barrels (2.3 million gallons)."}, {"PC 1": -55.26963806152344, "PC 2": 98.59601593017578, "label": "Other Tokens", "description": "The"}, {"PC 1": -135.9954833984375, "PC 2": -19.83866310119629, "label": "Other Tokens", "description": "va"}, {"PC 1": -2.829601287841797, "PC 2": 73.9699478149414, "label": "Other Tokens", "description": "lves"}, {"PC 1": -93.74581146240234, "PC 2": -7.6057515144348145, "label": "Other Tokens", "description": "opening"}, {"PC 1": 66.36638641357422, "PC 2": 93.47709655761719, "label": "Other Tokens", "description": "allowed"}, {"PC 1": 72.48827362060547, "PC 2": 94.59606170654297, "label": "Other Tokens", "description": "a"}, {"PC 1": -18.945785522460938, "PC 2": 29.28575325012207, "label": "Other Tokens", "description": "pressure"}, {"PC 1": -105.36312103271484, "PC 2": -29.27461051940918, "label": "Other Tokens", "description": "release"}, {"PC 1": -116.0946273803711, "PC 2": -44.56122589111328, "label": "Other Tokens", "description": "for"}, {"PC 1": 65.8604507446289, "PC 2": 71.3420639038086, "label": "Other Tokens", "description": "the"}, {"PC 1": -116.45894622802734, "PC 2": -61.833465576171875, "label": "Other Tokens", "description": "system"}, {"PC 1": 48.88253402709961, "PC 2": 180.182861328125, "label": "Other Tokens", "description": "and"}, {"PC 1": -119.1584243774414, "PC 2": -61.98579406738281, "label": "Other Tokens", "description": "oil"}, {"PC 1": 101.68101501464844, "PC 2": 56.67237091064453, "label": "Other Tokens", "description": "flow"}, {"PC 1": -64.2977066040039, "PC 2": -36.8864631652832, "label": "Other Tokens", "description": "ed"}, {"PC 1": -69.17207336425781, "PC 2": -46.449867248535156, "label": "Other Tokens", "description": "on"}, {"PC 1": -8.109111785888672, "PC 2": -22.052053451538086, "label": "Other Tokens", "description": "a"}, {"PC 1": 6.205630779266357, "PC 2": -52.20524978637695, "label": "Other Tokens", "description": "pad"}, {"PC 1": 74.4428482055664, "PC 2": -107.19259643554688, "label": "Other Tokens", "description": "to"}, {"PC 1": 195.51416015625, "PC 2": -24.534902572631836, "label": "Other Tokens", "description": "a"}, {"PC 1": 132.82749938964844, "PC 2": -79.95372009277344, "label": "Other Tokens", "description": "tank"}, {"PC 1": -23.43562889099121, "PC 2": -115.28144073486328, "label": "Other Tokens", "description": "that"}, {"PC 1": 37.69704055786133, "PC 2": 145.02268981933594, "label": "Other Tokens", "description": "can"}, {"PC 1": 56.01092529296875, "PC 2": -117.91738891601562, "label": "Other Tokens", "description": "hold"}, {"PC 1": 78.67987823486328, "PC 2": -134.97740173339844, "label": "Other Tokens", "description": "5"}, {"PC 1": 252.474853515625, "PC 2": -76.81398010253906, "label": "Other Tokens", "description": "5,000"}, {"PC 1": 95.26092529296875, "PC 2": -112.22120666503906, "label": "Other Tokens", "description": "ba"}, {"PC 1": -82.09284973144531, "PC 2": -68.58897399902344, "label": "Other Tokens", "description": "rrels"}, {"PC 1": -15.701212882995605, "PC 2": 122.33167266845703, "label": "Other Tokens", "description": "("}, {"PC 1": -38.29261779785156, "PC 2": 70.98457336425781, "label": "Other Tokens", "description": "2.3"}, {"PC 1": -118.85757446289062, "PC 2": 4.150813102722168, "label": "Other Tokens", "description": "million"}, {"PC 1": 19.59525489807129, "PC 2": 111.05162048339844, "label": "Other Tokens", "description": "gall"}, {"PC 1": -9.911493301391602, "PC 2": 84.44729614257812, "label": "Other Tokens", "description": "ons"}, {"PC 1": -125.0553970336914, "PC 2": -22.331771850585938, "label": "Other Tokens", "description": ")."}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>

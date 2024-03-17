@@ -38,7 +38,8 @@ LANGUAGES = [
     "deu_Latn",
     "arb_Arab",
     "tam_Taml",
-    "quy_Latn"
+    "quy_Latn",
+    "urd_Arab"
 ]
 
 # Load dataset
@@ -159,9 +160,9 @@ with h5py.File("representations.h5", "w") as f:
 
                     # Calculate mean-pooled sentence representation
                     if device == torch.device('cuda'):
-                        mean_pooled_sentence = np.mean(sentence.cpu().numpy(), axis=0)
+                        mean_pooled_sentence = np.mean(sentence[1:].cpu().numpy(), axis=0)
                     else:
-                        mean_pooled_sentence = np.mean(sentence.numpy(), axis=0)
+                        mean_pooled_sentence = np.mean(sentence[1:].numpy(), axis=0)
                     # Save mean-pooled sentence representation
                     # print(f'Creating {lang}/Sample #{example["id"][sentence_index]}/mean_pooled_sentence')
                     f.create_dataset(

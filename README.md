@@ -77,6 +77,12 @@ jupyter notebook task2_cheatVersion.ipynb
 ```
 
 ### Task 3: Model Adaptation
+** Model finetuning:
+```bash
+cd final_submission/Code/Task\ 3
+python task3.py
+```
+
 ```bash
 cd final_submission/Code/Task\ 3
 jupyter notebook task3-vis.ipynb
